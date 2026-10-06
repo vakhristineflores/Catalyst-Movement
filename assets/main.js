@@ -130,6 +130,56 @@
     t.addEventListener('keydown', e => { if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { const n = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length]; sel(n); n.focus(); } });
   });
 
+
+  /* program quiz */
+  const qbody = $('#qbody'), qbar = $('#qbar');
+  if (qbody) {
+    const Q = [
+      { q: 'Which sounds most like you?', o: [['I know business owners who could use help', 'aff'], ['I lead an audience or community', 'amb'], ['I run an agency or service business', 'wl']] },
+      { q: 'How involved do you want to be?', o: [['Share now and then, when it fits', 'aff'], ['Show up regularly with content and intros', 'amb'], ['Sell the services to my own clients', 'wl']] },
+      { q: 'What matters most to you?', o: [['Easy extra income, no commitments', 'aff'], ['Higher rewards and more visibility', 'amb'], ['A new revenue line under my brand', 'wl']] }
+    ];
+    const R = {
+      aff: { n: 'Affiliate Partner', w: 'Free, flexible and open to anyone. Share your code whenever it fits and earn 5% on every successful referral.', href: 'https://www.thecatalystvs.com/refer-a-friend', cta: 'Apply as an Affiliate', tab: 't-aff' },
+      amb: { n: 'Catalyst Ambassador', w: 'You have a voice people trust. Ambassadors earn higher rewards and get featured, audited and equipped to lead.', href: 'https://docs.google.com/forms/d/e/1FAIpQLSf81odENFKxGEZjPmLGqKKY2QKVPVxz9rUWSTjCRYC-iqVfIg/viewform', cta: 'Apply as an Ambassador', tab: 't-amb' },
+      wl: { n: 'White Label Partner', w: 'Offer VA services under your own brand. We fulfill behind the scenes, and your clients stay yours.', href: 'https://calendly.com/partners-thecatalystvs/30min', cta: 'Book a White Label call', tab: 't-wl' }
+    };
+    let step = 0, picks = [];
+    const render = () => {
+      qbar.style.width = (step / Q.length * 100) + '%';
+      if (step < Q.length) {
+        const d = Q[step];
+        qbody.innerHTML = `<div class="qanim"><div class="qstep">QUESTION ${step + 1} OF ${Q.length}</div><h3 class="qq"></h3><div class="qopts"></div>${step ? '<button class="qback" type="button">← Back</button>' : ''}</div>`;
+        qbody.querySelector('.qq').textContent = d.q;
+        d.o.forEach(([t, k]) => { const b = document.createElement('button'); b.type = 'button'; b.className = 'qopt'; b.textContent = t; b.onclick = () => { picks[step] = k; step++; render(); }; qbody.querySelector('.qopts').append(b); });
+        const back = qbody.querySelector('.qback'); if (back) back.onclick = () => { step--; render(); };
+      } else {
+        const c = { aff: 0, amb: 0, wl: 0 }; picks.forEach(k => c[k]++);
+        const win = ['amb', 'aff', 'wl'].reduce((a, b) => c[b] > c[a] ? b : a, picks[0]);
+        const r = R[win];
+        qbody.innerHTML = `<div class="qanim qres"><div class="qstep">YOUR BEST FIT</div><h3 class="o"></h3><p></p><div class="row"><a class="btn btn-o" target="_blank" rel="noopener"></a><button class="btn btn-line" type="button" data-see>See the details</button></div><button class="qback" type="button" data-again>Start over</button></div>`;
+        qbody.querySelector('h3').textContent = r.n; qbody.querySelector('p').textContent = r.w;
+        const a = qbody.querySelector('a'); a.href = r.href; a.textContent = r.cta + ' →';
+        qbody.querySelector('[data-see]').onclick = () => { const t = $('#' + r.tab); t.click(); $('#programs').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' }); };
+        qbody.querySelector('[data-again]').onclick = () => { step = 0; picks = []; render(); };
+      }
+    };
+    render();
+  }
+
+  /* earnings estimator */
+  const pkg = $('#pkg'), refs = $('#refs');
+  if (pkg) {
+    const fmt = n => '$' + Math.round(n).toLocaleString('en-US');
+    const calc = () => {
+      const v = +pkg.value, n = +refs.value;
+      $('#pkgOut').textContent = fmt(v); $('#refsOut').textContent = n;
+      $('#affOut').textContent = fmt(v * n * 0.05);
+      $('#ambOut').textContent = fmt(v * n * 0.05) + '–' + fmt(v * n * 0.10);
+    };
+    pkg.addEventListener('input', calc); refs.addEventListener('input', calc); calc();
+  }
+
   /* orange cursor dot */
   const cur = $('#cursor');
   if (cur && matchMedia('(hover:hover)').matches && !reduce) {

@@ -13,7 +13,10 @@ Colors are black, white and orange only (`#0D0D0D`, `#FFFFFF`, `#F09067`). Fonts
 - The service, client and photo cards tilt in 3D when you hover over them.
 - The 4-step staircases build up from the bottom.
 - **Ripple rings:** hover over or tap a ring to read about clients, the team and church partners.
-- **Program tabs:** switch between Affiliate, Ambassador and White Label.
+- **Program tabs:** switch between Affiliate, Ambassador and White Label, each with its own apply or booking button.
+- **"Find your path" quiz:** three questions that recommend a program and link straight to its application.
+- **Earnings estimator:** sliders show what a referral could be worth for Affiliates (5%) and Ambassadors (5–10%).
+- **FAQ:** the questions people usually ask on a partner call.
 - On desktop, an orange dot follows the cursor.
 - Motion is turned off automatically for visitors who set their device to reduce motion.
 
@@ -42,5 +45,6 @@ To use your own domain (for example `movement.thecatalystvs.com`), add it under 
 
 - **Text:** everything is in `index.html`, in the order it appears on the page.
 - **Photos:** replace files in `assets/img/` and keep the same file names, or update the `src` in `index.html`.
-- **Partner buttons:** the three buttons in the "Our invitation" section open an email to partners@thecatalystvs.com. To send people to an application form instead, replace each `mailto:` link with your form link.
+- **Application links:** Affiliate goes to thecatalystvs.com/refer-a-friend, Ambassador goes to the Google Form, and White Label goes to the Calendly booking page. To change one, search `index.html` and `assets/main.js` for the old link and replace it everywhere it appears.
+- **FAQ:** each question is a `<details>` block in the FAQ section of `index.html`.
 - **Ambassador terms:** the 5–10% and 2-year figures are in the Ambassador tab in `index.html`.
